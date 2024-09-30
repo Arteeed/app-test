@@ -10,6 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const piece = document.createElement('div');
             piece.className = 'puzzle-piece';
             piece.style.backgroundPosition = `-${(i % SIZE) * 100}px -${Math.floor(i / SIZE) * 100}px`;
+    
 
             puzzleContainer.appendChild(piece);
             pieces.push(piece);
@@ -64,6 +65,29 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     shuffleButton.addEventListener('click', shufflePuzzle);
+
+
+        // Get the image element and input field
+        const imageInput = document.getElementById('imageInput');
+        const previewImage = document.getElementById('preview');
+        
+        // Event listener for image input change
+        imageInput.addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    // Replace default image with uploaded image
+                    previewImage.src = e.target.result;
+                    
+                };
+                reader.readAsDataURL(file);
+            } else {
+                // If no image uploaded, keep the default image
+                previewImage.src = 'logo.jpg';
+            }
+        });
+      
 
     createPuzzle();
 });
