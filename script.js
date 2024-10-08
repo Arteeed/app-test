@@ -1,6 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
     const puzzleContainer = document.querySelector('.puzzle-container');
     const shuffleButton = document.getElementById('shuffle-btn');
+    const imageInput = document.getElementById('imageInput');
     const SIZE = 3; // Grid size (3x3)
     let pieces = [];
 
@@ -10,7 +11,6 @@ document.addEventListener('DOMContentLoaded', () => {
             const piece = document.createElement('div');
             piece.className = 'puzzle-piece';
             piece.style.backgroundPosition = `-${(i % SIZE) * 100}px -${Math.floor(i / SIZE) * 100}px`;
-    
 
             puzzleContainer.appendChild(piece);
             pieces.push(piece);
@@ -65,29 +65,25 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     shuffleButton.addEventListener('click', shufflePuzzle);
+    var referenceImage = document.querySelector('#preview');
 
-
-        // Get the image element and input field
-        const imageInput = document.getElementById('imageInput');
-        const previewImage = document.getElementById('preview');
-        
-        // Event listener for image input change
-        imageInput.addEventListener('change', function(event) {
-            const file = event.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    // Replace default image with uploaded image
-                    previewImage.src = e.target.result;
-                    
-                };
-                reader.readAsDataURL(file);
-            } else {
-                // If no image uploaded, keep the default image
-                previewImage.src = 'logo.jpg';
-            }
-        });
-      
+    // Event listener for image input change
+    imageInput.addEventListener('change', function(event) {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const imageUrl = e.target.result;
+                pieces.forEach(piece => {
+                    if (!piece.classList.contains('empty')) {
+                        piece.style.backgroundImage = `url(${imageUrl})`;
+                    }
+                });
+                referenceImage.src = imageUrl; // Correctly set the src attribute
+            };
+            reader.readAsDataURL(file);
+        }
+    });
 
     createPuzzle();
 });
